@@ -1,13 +1,13 @@
-# dmc-states-mixin
+# dmc-promise
 
 try:
 	if not gSTARTED: print( gSTARTED )
 except:
-	MODULE = "dmc-states-mixin"
+	MODULE = "dmc-promise"
 	include: "../DMC-Corona-Library/snakemake/Snakefile"
 
 module_config = {
-	"name": "dmc-states-mixin",
+	"name": "dmc-promise",
 	"module": {
 		"dir": "dmc_corona",
 		"files": [
@@ -24,5 +24,5 @@ module_config = {
 	}
 }
 
-register( "dmc-states-mixin", module_config )
+register( "dmc-promise", module_config )
 
