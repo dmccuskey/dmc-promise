@@ -11,7 +11,7 @@ module_config = {
 	"module": {
 		"dir": "dmc_corona",
 		"files": [
-			"dmc_states_mix.lua"
+			"dmc_promise.lua"
 		],
 		"requires": [
 			"dmc-corona-boot",
