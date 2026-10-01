@@ -16,7 +16,9 @@ d:callback( 'done' )  --> done
 
 - `Deferred`: the producer's side; resolves or rejects its promise
 - `Promise`: `done()` and `fail()` callbacks, any number of each; a callback added after the promise settled runs at once
-- Resolve and reject with any number of values; the callbacks get them all
+- Resolve and reject with any number of values, `nil` included; the callbacks get them all
+- A promise settles once: a later `callback()` or `errback()` is ignored
+- `maybeDeferred()`: call a function and get a `Deferred` back, whether it returned a value, a `Deferred`, or raised an error
 - The futures of [dmc-wamp](https://github.com/dmccuskey/dmc-wamp)
 - Pure Lua, no plugins needed; MIT licensed
 
@@ -93,25 +95,18 @@ To update, copy `dmc_corona_boot.lua` and `dmc_corona/` again from the newer ver
 
 ## Documentation
 
-`require 'dmc_corona.dmc_promise'` returns lua-promise's module, so its documentation applies as written:
+`require 'dmc_corona.dmc_promise'` returns a copy of lua-promise's module (0.2.0) with `VERSION` added, so its documentation applies as written:
 
 - [Reference](https://github.com/dmccuskey/lua-promise#reference): `Deferred`, `Promise`, `maybeDeferred()`
-- [Known Issues](https://github.com/dmccuskey/lua-promise#known-issues): what it doesn't do that other promise libraries do (chaining, settling once, catching errors)
+- [Known Issues](https://github.com/dmccuskey/lua-promise#known-issues): what it doesn't do that other promise libraries do (chaining, catching errors in callbacks)
 
 ## Configuration
 
 dmc-promise has no settings: `dmc_corona.cfg` needs no section for it, only the `[DMC_CORONA]` section that tells the loader where the libraries are. See [dmc-corona-boot Configuration](https://github.com/dmccuskey/dmc-corona-boot/blob/master/docs/configuration.md).
 
-## Known Issues
-
-The bugs of the promises themselves are in lua-promise's [Known Issues](https://github.com/dmccuskey/lua-promise#known-issues). In `dmc_promise.lua`:
-
-- It sets the global `_extend` (its copy of `Utils.extend()` declares the inner function without `local`).
-- Its version (`0.1.0`) isn't available to code; `Promise.__version` is lua-promise's.
-
 ## Development
 
-Only `dmc_corona/dmc_promise.lua` is written in this repository. It loads the DMC boot loader and returns lua-promise's module from `lib.dmc_lua.lua_promise`. Everything else is a generated copy; fix it in its own repository, then rebuild:
+Only `dmc_corona/dmc_promise.lua` and `tests/` are written in this repository. `dmc_promise.lua` loads the DMC boot loader and returns a copy of lua-promise's module from `lib.dmc_lua.lua_promise`, with `VERSION`; the shared module is left as it is, and the copy holds the same classes, so `isa()` checks work whichever name a module requires it by. Everything else is a generated copy; fix it in its own repository, then rebuild:
 
 | file | owner |
 |---|---|
@@ -124,7 +119,13 @@ The copies are made by Snakemake from sibling checkouts of the repositories abov
 snakemake --cores 1 build_all
 ```
 
-dmc-promise has no tests of its own; lua-promise's are in its `spec/`. The Quick Start is the check that the package loads in Solar2D.
+The unit tests check the wrapper and that lua-promise's fixes come through it; lua-promise's full specs are in its `spec/`. They run under plain Lua 5.1 with dkjson, with stand-ins for the Solar2D globals the boot loader uses. From the repository's root folder:
+
+```sh
+tests/run_unit.sh
+```
+
+The Quick Start is the check that the package loads in Solar2D.
 
 ## License
 
