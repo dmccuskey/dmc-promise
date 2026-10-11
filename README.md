@@ -95,10 +95,10 @@ To update, copy `dmc_corona_boot.lua` and `dmc_corona/` again from the newer ver
 
 ## Documentation
 
-`require 'dmc_corona.dmc_promise'` returns a copy of lua-promise's module (0.2.0) with `VERSION` added, so its documentation applies as written:
+`require 'dmc_corona.dmc_promise'` returns a copy of lua-promise's module (0.2.1) with `VERSION` added, so its documentation applies as written:
 
 - [Reference](https://github.com/dmccuskey/lua-promise#reference): `Deferred`, `Promise`, `maybeDeferred()`
-- [Known Issues](https://github.com/dmccuskey/lua-promise#known-issues): what it doesn't do that other promise libraries do (chaining, catching errors in callbacks)
+- [Known Issues](https://github.com/dmccuskey/lua-promise#known-issues): what it doesn't do that other promise libraries do (chaining, passing a callback's error to the errbacks)
 
 ## Configuration
 

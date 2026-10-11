@@ -32,8 +32,8 @@ end
 
 function test_module()
 	assert_equal( 'table', type( Promise ) )
-	assert_equal( '0.2.0', Promise.VERSION )
-	assert_equal( '0.2.0', Promise.__version )
+	assert_equal( '0.2.1', Promise.VERSION )
+	assert_equal( '0.2.1', Promise.__version )
 	assert_nil( LuaPromise.VERSION )
 end
 
@@ -110,4 +110,16 @@ function test_maybe_deferred()
 	d = Promise.maybeDeferred( function() error( 'boom', 0 ) end )
 	d:addCallbacks( nil, function( r ) reason = r end )
 	assert_equal( 'boom', reason )
+end
+
+-- lua-promise 0.2.1: a callback that raises doesn't stop the later ones
+function test_raising_callback()
+	local d = Promise.Deferred:new()
+	local ran = false
+	d:addCallbacks( function() error( 'boom', 0 ) end )
+	d:addCallbacks( function() ran = true end )
+	local ok, err = pcall( function() d:callback( 1 ) end )
+	assert_false( ok )
+	assert_equal( 'boom', err )
+	assert_true( ran )
 end
