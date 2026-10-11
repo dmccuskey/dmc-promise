@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1 (2026-10-11)
+
+### Fixed
+
+- Rebuilt with lua-promise 0.2.1: a callback that raises an error no longer keeps the later callbacks of the same promise from running. All of them run, then the first error is raised to whoever settled the promise.
+
 ## 0.2.0 (2026-10-01)
 
 ### Changed
